@@ -576,10 +576,11 @@ function vAbiertas(){
     ${PREGUNTAS_ABIERTAS.map((q,i)=>`
       <div class="field">
         <label>${i+1}. ${esc(q.t)} <span style="color:var(--muted);font-weight:400">(máx. ${q.maxPalabras} palabras)</span></label>
-        <textarea data-qid="${q.id}" data-max="${q.maxPalabras}" oninput="contarPalabras(this)" onpaste="marcarPaste(event)"></textarea>
+        <textarea id="ta_${q.id}" data-qid="${q.id}" data-max="${q.maxPalabras}" oninput="contarPalabras(this)" onpaste="marcarPaste(event)"></textarea>
         <div class="counter"><span>0</span>/${q.maxPalabras} palabras</div>
       </div>`).join('')}
-    <button class="btn btn-full" onclick="finalizarTest()">Finalizar y enviar test</button>
+    <div id="errMsg" style="display:none;background:#fee2e2;color:#991b1b;padding:14px;border-radius:10px;margin-bottom:14px;font-size:14px;border-left:4px solid #ef4444;font-weight:600"></div>
+    <button type="button" id="btnFin" class="btn btn-full" onclick="finalizarTest()">Finalizar y enviar test</button>
   </div>`);
 }
 function contarPalabras(el){
@@ -590,95 +591,133 @@ function contarPalabras(el){
 function marcarPaste(e){e.preventDefault();S.flags.paste++;alert('Por seguridad, no está permitido pegar texto. Escribe tu respuesta con tus propias palabras.');}
 
 function finalizarTest(){
-  detenerTimerCalculo();
-  const tas=document.querySelectorAll('textarea[data-qid]');
-  for(const t of tas){
-    if(t.value.trim().length<15){alert('Por favor responde todas las preguntas abiertas con al menos una frase.');t.focus();return;}
-    S.respuestas.abiertas[t.dataset.qid]=t.value.trim();
+  const errBox = $('errMsg');
+  const btnFin = $('btnFin');
+  try {
+    if(errBox) errBox.style.display='none';
+    if(btnFin){ btnFin.disabled = true; btnFin.textContent = 'Procesando...'; }
+    detenerTimerCalculo();
+
+    // Validar que ambas preguntas estén respondidas
+    const tas = document.querySelectorAll('textarea[data-qid]');
+    let primeraVacia = null;
+    for(const t of tas){
+      if((t.value||'').trim().length < 15){
+        primeraVacia = t;
+        break;
+      }
+    }
+    if(primeraVacia){
+      if(errBox){
+        errBox.textContent = '⚠️ Debes responder TODAS las preguntas abiertas con al menos una frase (mínimo 15 caracteres por respuesta). Revisa las que están en blanco.';
+        errBox.style.display = 'block';
+        errBox.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+      primeraVacia.focus();
+      if(btnFin){ btnFin.disabled = false; btnFin.textContent = 'Finalizar y enviar test'; }
+      return;
+    }
+
+    // Guardar respuestas
+    for(const t of tas){
+      S.respuestas.abiertas[t.dataset.qid] = t.value.trim();
+    }
+
+    S.flags.fin = Date.now();
+    S.flags.tiempoTotal = Math.round((S.flags.fin - S.flags.inicio)/1000);
+
+    let pPers=0,maxPers=0;PREGUNTAS_PERSONALIDAD.forEach(q=>{pPers+=S.respuestas.personalidad[q.id]?.p??0;maxPers+=3;});
+    let pCom=0,maxCom=0;PREGUNTAS_COMUNICACION.forEach(q=>{pCom+=S.respuestas.comunicacion[q.id]?.p??0;maxCom+=3;});
+    let pInv=0,maxInv=0;PREGUNTAS_INVENTARIO.forEach(q=>{pInv+=S.respuestas.inventario[q.id]?.p??0;maxInv+=3;});
+    let pVenc=0,maxVenc=0;PREGUNTAS_VENCIMIENTOS.forEach(q=>{pVenc+=S.respuestas.vencimientos[q.id]?.p??0;maxVenc+=3;});
+    let pYape=0,maxYape=0;PREGUNTAS_YAPE.forEach(q=>{pYape+=S.respuestas.yape[q.id]?.p??0;maxYape+=3;});
+    let pMem=0;Object.values(S.respuestas.memoria).forEach(m=>{if(m.correcta)pMem++;});
+    let pCal=0;Object.values(S.respuestas.calculo).forEach(c=>{if(c.correcta)pCal++;});
+    const tiempoCalculoTotal=(S.timers.tiemposCalculo||[]).reduce((a,b)=>a+b,0);
+
+    const flags=[];
+    if(S.flags.tiempoTotal<TIEMPO_MINIMO_TEST)flags.push('Tiempo total muy bajo ('+S.flags.tiempoTotal+'s) — posible uso de IA o respuestas al azar.');
+    if(S.flags.tab>2)flags.push('Cambios de pestaña detectados ('+S.flags.tab+') — posible búsqueda externa.');
+    if(S.flags.paste>0)flags.push('Intento(s) de pegar texto ('+S.flags.paste+') — posible uso de IA.');
+    if(S.registro.modalidad==='Full time'&&S.registro.permanencia==='3 meses')flags.push('Coherencia: eligió Full time pero permanencia de solo 3 meses.');
+
+    const psico=auditarPsicometricamente({pPers,maxPers,pCom,maxCom,pInv,maxInv,pVenc,maxVenc,pYape,maxYape,pMem,pCal,tiemposCalculo:S.timers.tiemposCalculo,flags,S});
+
+    const resultado={
+      ...S.registro,fecha:new Date().toISOString(),
+      puntajes:{
+        personalidad:pPers,maxPersonalidad:maxPers,
+        comunicacion:pCom,maxComunicacion:maxCom,
+        inventario:pInv,maxInventario:maxInv,
+        vencimientos:pVenc,maxVencimientos:maxVenc,
+        yape:pYape,maxYape:maxYape,
+        memoria:pMem,maxMemoria:PREGUNTAS_MEMORIA.length,
+        calculo:pCal,maxCalculo:PREGUNTAS_CALCULO.length
+      },
+      tiempoCalculoTotal,tiemposCalculo:S.timers.tiemposCalculo,respuestas:S.respuestas,flags,
+      flagCount:{tab:S.flags.tab,paste:S.flags.paste,tiempoTotal:S.flags.tiempoTotal},
+      abiertas:S.respuestas.abiertas,psicometrico:psico
+    };
+
+    try{
+      const lista=JSON.parse(localStorage.getItem('postulantes_minimarket')||'[]');
+      lista.push(resultado);
+      localStorage.setItem('postulantes_minimarket',JSON.stringify(lista));
+    }catch(e){console.warn('No se pudo guardar localmente:',e);}
+
+    const code=encodeRes(resultado);
+    window.__lastResult=resultado;
+    window.__lastCode=code;
+
+    const waMsg = `Hola MINI MARKET 👋\n\n` +
+                  `Terminé el test de evaluación de postulantes.\n\n` +
+                  `👤 *Nombre:* ${S.registro.nombre}\n` +
+                  `📋 *Modalidad:* ${S.registro.modalidad}\n` +
+                  `⏰ *Turno:* ${S.registro.turno}\n` +
+                  `📍 *Distrito:* ${S.registro.distrito}\n` +
+                  `💰 *Aspiración:* S/ ${S.registro.sueldo}\n\n` +
+                  `*Código de evaluación:*\n${code}\n\n` +
+                  `Quedo atento a su respuesta. ¡Gracias!`;
+
+    const waUrl = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
+    const mailSubject = `Postulación MINI MARKET — ${S.registro.nombre}`;
+    const mailBody = waMsg.replace(/\*/g,'');
+    const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+
+    render(`
+    <div class="card" style="text-align:center">
+      <span class="success-icon">🎉</span>
+      <h2 style="font-size:22px;margin-bottom:6px">¡Test completado!</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto">
+        Tu evaluación fue registrada correctamente. Ahora envíala al <b>Mini Market</b> con un solo toque.
+      </p>
+      <a href="${waUrl}" target="_blank" rel="noopener" class="btn btn-wa btn-full">📱 Enviar resultado por WhatsApp</a>
+      <div class="notice success" style="margin-top:14px;text-align:left">✅ Al presionar el botón, WhatsApp se abrirá con el mensaje listo. Solo presiona <b>Enviar</b> y listo.</div>
+      <a href="${mailUrl}" class="btn btn-mail btn-full" style="margin-top:10px">📧 Enviar por correo (alternativa)</a>
+      <div style="margin-top:22px">
+        <button class="btn-ghost btn" style="font-size:12px;padding:8px 14px" onclick="toggleAvanzado()"><span id="toggleTxt">▼ Ver opciones avanzadas</span></button>
+      </div>
+      <div id="avanzado" style="display:none;margin-top:16px;text-align:left">
+        <div class="notice info" style="font-size:12px">Si el botón de WhatsApp no funcionó, copia este código y envíalo manualmente por WhatsApp al mismo número del aviso.</div>
+        <div class="code-box" id="cod">${code}</div>
+        <button class="btn btn-ghost btn-full" onclick="copiarCodigo()">📋 Copiar código</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="descargarJSON()">⬇️ Descargar JSON</button>
+      </div>
+      <div class="notice info" style="margin-top:22px;text-align:left;font-size:12px">🔒 Tu correo quedó registrado. No podrás rendir el test nuevamente con el mismo correo.</div>
+    </div>`);
+    window.scrollTo({top:0,behavior:'smooth'});
+
+  } catch(err){
+    console.error('Error en finalizarTest:', err);
+    if(errBox){
+      errBox.innerHTML = '⚠️ <b>Ocurrió un error al procesar el test:</b><br><span style="font-family:monospace;font-size:12px">' + (err.message||err) + '</span><br><br>Por favor, toma una <b>captura de pantalla</b> de este mensaje y envíala por WhatsApp para revisarlo.';
+      errBox.style.display = 'block';
+      errBox.scrollIntoView({behavior:'smooth', block:'center'});
+    } else {
+      alert('Error: ' + (err.message||err));
+    }
+    if(btnFin){ btnFin.disabled = false; btnFin.textContent = 'Finalizar y enviar test'; }
   }
-  S.flags.fin=Date.now();
-  S.flags.tiempoTotal=Math.round((S.flags.fin-S.flags.inicio)/1000);
-
-  let pPers=0,maxPers=0;PREGUNTAS_PERSONALIDAD.forEach(q=>{pPers+=S.respuestas.personalidad[q.id]?.p??0;maxPers+=3;});
-  let pCom=0,maxCom=0;PREGUNTAS_COMUNICACION.forEach(q=>{pCom+=S.respuestas.comunicacion[q.id]?.p??0;maxCom+=3;});
-  let pInv=0,maxInv=0;PREGUNTAS_INVENTARIO.forEach(q=>{pInv+=S.respuestas.inventario[q.id]?.p??0;maxInv+=3;});
-  let pVenc=0,maxVenc=0;PREGUNTAS_VENCIMIENTOS.forEach(q=>{pVenc+=S.respuestas.vencimientos[q.id]?.p??0;maxVenc+=3;});
-  let pYape=0,maxYape=0;PREGUNTAS_YAPE.forEach(q=>{pYape+=S.respuestas.yape[q.id]?.p??0;maxYape+=3;});
-  let pMem=0;Object.values(S.respuestas.memoria).forEach(m=>{if(m.correcta)pMem++;});
-  let pCal=0;Object.values(S.respuestas.calculo).forEach(c=>{if(c.correcta)pCal++;});
-  const tiempoCalculoTotal=(S.timers.tiemposCalculo||[]).reduce((a,b)=>a+b,0);
-
-  const flags=[];
-  if(S.flags.tiempoTotal<TIEMPO_MINIMO_TEST)flags.push('Tiempo total muy bajo ('+S.flags.tiempoTotal+'s) — posible uso de IA o respuestas al azar.');
-  if(S.flags.tab>2)flags.push('Cambios de pestaña detectados ('+S.flags.tab+') — posible búsqueda externa.');
-  if(S.flags.paste>0)flags.push('Intento(s) de pegar texto ('+S.flags.paste+') — posible uso de IA.');
-  if(S.registro.modalidad==='Full time'&&S.registro.permanencia==='3 meses')flags.push('Coherencia: eligió Full time pero permanencia de solo 3 meses.');
-
-  const psico=auditarPsicometricamente({pPers,maxPers,pCom,maxCom,pInv,maxInv,pVenc,maxVenc,pYape,maxYape,pMem,pCal,tiemposCalculo:S.timers.tiemposCalculo,flags,S});
-
-  const resultado={
-    ...S.registro,fecha:new Date().toISOString(),
-    puntajes:{
-      personalidad:pPers,maxPersonalidad:maxPers,
-      comunicacion:pCom,maxComunicacion:maxCom,
-      inventario:pInv,maxInventario:maxInv,
-      vencimientos:pVenc,maxVencimientos:maxVenc,
-      yape:pYape,maxYape:maxYape,
-      memoria:pMem,maxMemoria:PREGUNTAS_MEMORIA.length,
-      calculo:pCal,maxCalculo:PREGUNTAS_CALCULO.length
-    },
-    tiempoCalculoTotal,tiemposCalculo:S.timers.tiemposCalculo,respuestas:S.respuestas,flags,
-    flagCount:{tab:S.flags.tab,paste:S.flags.paste,tiempoTotal:S.flags.tiempoTotal},
-    abiertas:S.respuestas.abiertas,psicometrico:psico
-  };
-
-  try{
-    const lista=JSON.parse(localStorage.getItem('postulantes_minimarket')||'[]');
-    lista.push(resultado);
-    localStorage.setItem('postulantes_minimarket',JSON.stringify(lista));
-  }catch(e){}
-
-  const code=encodeRes(resultado);
-  window.__lastResult=resultado;
-  window.__lastCode=code;
-
-  const waMsg = `Hola MINI MARKET 👋\n\n` +
-                `Terminé el test de evaluación de postulantes.\n\n` +
-                `👤 *Nombre:* ${S.registro.nombre}\n` +
-                `📋 *Modalidad:* ${S.registro.modalidad}\n` +
-                `⏰ *Turno:* ${S.registro.turno}\n` +
-                `📍 *Distrito:* ${S.registro.distrito}\n` +
-                `💰 *Aspiración:* S/ ${S.registro.sueldo}\n\n` +
-                `*Código de evaluación:*\n${code}\n\n` +
-                `Quedo atento a su respuesta. ¡Gracias!`;
-
-  const waUrl = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
-  const mailSubject = `Postulación MINI MARKET — ${S.registro.nombre}`;
-  const mailBody = waMsg.replace(/\*/g,'');
-  const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
-
-  render(`
-  <div class="card" style="text-align:center">
-    <span class="success-icon">🎉</span>
-    <h2 style="font-size:22px;margin-bottom:6px">¡Test completado!</h2>
-    <p style="color:var(--muted);font-size:14px;margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto">
-      Tu evaluación fue registrada correctamente. Ahora envíala al <b>Mini Market</b> con un solo toque.
-    </p>
-    <a href="${waUrl}" target="_blank" rel="noopener" class="btn btn-wa btn-full">📱 Enviar resultado por WhatsApp</a>
-    <div class="notice success" style="margin-top:14px;text-align:left">✅ Al presionar el botón, WhatsApp se abrirá con el mensaje listo. Solo presiona <b>Enviar</b> y listo.</div>
-    <a href="${mailUrl}" class="btn btn-mail btn-full" style="margin-top:10px">📧 Enviar por correo (alternativa)</a>
-    <div style="margin-top:22px">
-      <button class="btn-ghost btn" style="font-size:12px;padding:8px 14px" onclick="toggleAvanzado()"><span id="toggleTxt">▼ Ver opciones avanzadas</span></button>
-    </div>
-    <div id="avanzado" style="display:none;margin-top:16px;text-align:left">
-      <div class="notice info" style="font-size:12px">Si el botón de WhatsApp no funcionó, copia este código y envíalo manualmente por WhatsApp al mismo número del aviso.</div>
-      <div class="code-box" id="cod">${code}</div>
-      <button class="btn btn-ghost btn-full" onclick="copiarCodigo()">📋 Copiar código</button>
-      <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="descargarJSON()">⬇️ Descargar JSON</button>
-    </div>
-    <div class="notice info" style="margin-top:22px;text-align:left;font-size:12px">🔒 Tu correo quedó registrado. No podrás rendir el test nuevamente con el mismo correo.</div>
-  </div>`);
-  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function toggleAvanzado(){const el=$('avanzado'),txt=$('toggleTxt');if(el.style.display==='none'){el.style.display='block';txt.textContent='▲ Ocultar opciones avanzadas';}else{el.style.display='none';txt.textContent='▼ Ver opciones avanzadas';}}
