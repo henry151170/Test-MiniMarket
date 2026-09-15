@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evaluación Postulantes MINI MARKET</title>
+<style>
+:root{--primary:#7c3aed;--primary-dark:#5b21b6;--accent:#ec4899;--bg:#f8f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--border:#e5e7eb;--good:#10b981;--warn:#f59e0b;--bad:#ef4444;--wa:#25d366;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:linear-gradient(135deg,#f8f7fb,#f3e8ff);color:var(--text);min-height:100vh;line-height:1.5;padding:16px}
+.wrap{max-width:760px;margin:0 auto}
+.header{text-align:center;padding:20px 10px 28px}
+.header h1{font-size:22px;color:var(--primary-dark);margin-bottom:6px}
+.header p{color:var(--muted);font-size:14px}
+.card{background:var(--card);border-radius:16px;padding:26px;box-shadow:0 4px 24px rgba(124,58,237,.08);margin-bottom:18px}
+h2{font-size:18px;color:var(--primary-dark);margin-bottom:14px}
+h3{font-size:15px;color:var(--primary-dark);margin:16px 0 8px}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#374151}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fff;transition:.15s;color:var(--text)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+textarea{resize:vertical;min-height:90px}
+.field{margin-bottom:15px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+.btn{display:inline-block;padding:13px 26px;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:.15s;background:var(--primary);color:#fff;text-align:center;text-decoration:none}
+.btn:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-ghost{background:#fff;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-ghost:hover{background:#f3e8ff}
+.btn-full{width:100%}
+.btn-wa{background:var(--wa);font-size:17px;padding:18px 26px;box-shadow:0 6px 20px rgba(37,211,102,.35)}
+.btn-wa:hover{background:#1ebe5d;box-shadow:0 8px 24px rgba(37,211,102,.45)}
+.btn-mail{background:#ea4335;color:#fff;border:none}
+.btn-mail:hover{background:#c5221f}
+.opt{display:block;padding:14px 16px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:10px;cursor:pointer;font-size:14px;transition:.15s;background:#fff}
+.opt:hover{border-color:var(--primary);background:#faf5ff}
+.opt.sel{border-color:var(--primary);background:#f3e8ff;font-weight:600}
+.opt input{display:none}
+.progress{height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-bottom:18px}
+.progress > div{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:.3s}
+.chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.chip.good{background:#d1fae5;color:#065f46}
+.chip.warn{background:#fef3c7;color:#92400e}
+.chip.bad{background:#fee2e2;color:#991b1b}
+.notice{background:#fef3c7;border-left:4px solid var(--warn);padding:12px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;color:#78350f}
+.notice.info{background:#e0e7ff;border-color:var(--primary);color:#3730a3}
+.notice.danger{background:#fee2e2;border-color:var(--bad);color:#7f1d1d}
+.notice.success{background:#d1fae5;border-color:var(--good);color:#065f46}
+.timer{font-size:34px;font-weight:700;color:var(--accent);text-align:center;margin:10px 0}
+.timer-bar{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:8px 0 18px}
+.timer-bar > div{height:100%;background:linear-gradient(90deg,var(--accent),var(--bad));transition:width .3s linear}
+.mem-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+@media(max-width:560px){.mem-grid{grid-template-columns:1fr 1fr}}
+.mem-card{background:linear-gradient(135deg,#fef3c7,#fef9e7);border:2px solid #fde68a;border-radius:16px;padding:18px 12px;text-align:center;box-shadow:0 2px 8px rgba(245,158,11,.08)}
+.mem-card .emoji{font-size:52px;line-height:1;display:block;margin-bottom:8px}
+.mem-card .nom{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.mem-card .precio{font-size:22px;font-weight:800;color:var(--primary-dark)}
+.inv-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.inv-table th{background:#fef3c7;color:#78350f;padding:10px;text-align:left;font-size:12px;font-weight:700}
+.inv-table td{padding:10px;border-top:1px solid var(--border)}
+.venc-card{background:#fff;border:2px solid #fde68a;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.venc-card .prod-nom{font-size:14px;font-weight:600;color:#374151}
+.venc-card .fecha{font-size:13px;color:var(--muted)}
+.venc-card.peligro{border-color:#ef4444;background:#fef2f2}
+.venc-card.aviso{border-color:#f59e0b;background:#fffbeb}
+.venc-card.ok{border-color:#10b981;background:#ecfdf5}
+.counter{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+.code-box{background:#1f2937;color:#a7f3d0;padding:14px;border-radius:10px;font-family:monospace;font-size:11px;word-break:break-all;max-height:140px;overflow:auto;margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:#f9fafb;font-weight:600;color:#374151;font-size:12px;text-transform:uppercase}
+tr:hover td{background:#faf5ff}
+.admin-link{text-align:center;margin-top:22px;font-size:12px;color:var(--muted)}
+.admin-link a{color:var(--muted);text-decoration:none;cursor:pointer}
+.admin-link a:hover{color:var(--primary)}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;margin-right:4px}
+.tag.p{background:#fee2e2;color:#991b1b}
+.tag.g{background:#d1fae5;color:#065f46}
+.detail{background:#f9fafb;border-radius:10px;padding:14px;margin:10px 0;font-size:13px}
+.detail h4{font-size:13px;color:var(--primary-dark);margin:10px 0 6px}
+.detail .qa{margin-bottom:8px}
+.detail .qa .q{font-weight:600;color:#374151}
+.detail .qa .a{color:var(--muted)}
+.psy-box{background:linear-gradient(135deg,#fef3c7,#faf5ff);border:2px solid var(--primary);border-radius:14px;padding:18px;margin:14px 0}
+.psy-box h4{font-size:14px;color:var(--primary-dark);margin-bottom:8px;letter-spacing:.5px}
+.psy-dim{margin-bottom:10px}
+.psy-dim label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:#374151}
+.psy-dim label b{color:var(--primary-dark)}
+.psy-bar{height:20px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-bottom:2px}
+.psy-bar > div{height:100%;border-radius:99px;transition:width .6s ease}
+.psy-narrative{background:#fff;border-radius:10px;padding:14px;font-size:13px;line-height:1.7;color:#374151;margin-top:10px}
+.psy-narrative b{color:var(--primary-dark)}
+.ctx-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+@media(max-width:560px){.ctx-grid{grid-template-columns:1fr}}
+.ctx-card{background:#fff;border-radius:10px;padding:12px;font-size:12px}
+.ctx-card .lbl{color:var(--muted);text-transform:uppercase;font-size:10px;font-weight:700;letter-spacing:.4px}
+.ctx-card .val{font-size:16px;font-weight:800;color:var(--primary-dark);margin:4px 0}
+.ctx-card .det{color:var(--muted);font-size:11px}
+@keyframes pop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.success-icon{font-size:76px;line-height:1;display:inline-block;animation:pop .5s cubic-bezier(.5,1.8,.5,1);margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>🛒 Evaluación Postulantes MINI MARKET</h1>
+    <p>Jesús María, Lima · Caja · Atención · Reposición · Inventario</p>
+  </div>
+  <div id="app"></div>
+  <div class="admin-link">
+    <a onclick="pedirAdmin()">Acceso administrador</a>
+  </div>
+</div>
+<script>
+/* ============================================================
+   CONFIGURACIÓN
+   ============================================================ */
+const ADMIN_PASSWORD = 'GMarket2024*';
+const STORE_WHATSAPP = '51985659774';
+const STORE_EMAIL    = 'gmobilejm@gmail.com';
+const TIEMPO_MINIMO_TEST = 180;
+const TIEMPO_POR_CALCULO = 40;
+const EDAD_MINIMA = 20;
+
+const PROXIMIDAD = {
+  'Jesús María':100,'Lince':92,'San Isidro':88,'Magdalena del Mar':85,'Pueblo Libre':82,'Breña':80,
+  'San Miguel':78,'Surquillo':76,'Lima (Cercado)':75,'Miraflores':70,'San Borja':68,'La Victoria':65,
+  'Rímac':62,'Santiago de Surco':60,'Independencia':58,'Barranco':55,'San Martín de Porres':52,'San Luis':52,
+  'San Juan de Miraflores':48,'El Agustino':48,'Los Olivos':45,'Chorrillos':45,'Carmen de la Legua':45,
+  'Bellavista':42,'La Perla':42,'La Molina':42,'San Juan de Lurigancho':40,'Santa Anita':40,'Callao (Cercado)':40,
+  'Villa María del Triunfo':38,'La Punta':38,'Villa El Salvador':35,'Ate':35,'Comas':30,'Carabayllo':25,
+  'Puente Piedra':25,'Mi Perú':25,'Ventanilla':22,'Santa Rosa':20,'Chaclacayo':20,'Cieneguilla':20,
+  'Lurigancho-Chosica':18,'Ancón':15,'Pachacámac':15,'Lurín':12,'Punta Hermosa':10,'Punta Negra':10,
+  'San Bartolo':8,'Santa María del Mar':8,'Pucusana':5
+};
+const DISTRITOS_LIMA = Object.keys(PROXIMIDAD).sort();
+const GRADOS = ["Secundaria completa","Técnica","Superior"];
+
+/* ============================================================
+   SECCIÓN 1: PERSONALIDAD (6)
+   ============================================================ */
+const PREGUNTAS_PERSONALIDAD = [
+  {id:'p1',texto:'Cuando no hay clientes en el minimarket, lo primero que haces es:',opciones:[
+    {t:'Adelanto pendientes personales rápidos (responder mensajes, coordinar algo), así no dejo cosas para después.',p:-2},
+    {t:'Reviso las góndolas, acomodo la mercadería por categoría, limpio el pasillo y anoto lo que está por agotarse para reponer.',p:3},
+    {t:'Descanso un momento en la trastienda; así repongo energía para cuando lleguen clientes.',p:-1},
+    {t:'Reviso fechas de vencimiento en los productos de panadería y lácteos, y separo lo próximo a vencer.',p:2}]},
+  {id:'p2',texto:'Tu compañera llega tarde por tercera vez esta semana y te pide "no la delates" porque son amigas. ¿Qué haces?',opciones:[
+    {t:'Le digo que hable ella misma con la encargada; si no lo hace hoy, tendré que reportarlo.',p:3},
+    {t:'Le ayudo a marcar su entrada hoy y le digo que es la última vez, para que no se sienta sola.',p:-2},
+    {t:'Le pregunto qué le pasa y la aconsejo, pero no digo nada a la encargada.',p:-1},
+    {t:'Le sugiero que hable con la encargada y le ofrezco acompañarla si quiere.',p:2}]},
+  {id:'p3',texto:'Si te equivocas al dar el vuelto y te das cuenta recién al final del día:',opciones:[
+    {t:'Anoto la diferencia en un papel para revisarlo con la encargada al día siguiente.',p:-1},
+    {t:'Aviso de inmediato a la encargada y busco cómo solucionarlo con las boletas del día.',p:3},
+    {t:'Si es poco, lo asumo yo para no hacer problemas.',p:-2},
+    {t:'Reviso las boletas y si identifico al cliente, aviso a la encargada para devolverle.',p:2}]},
+  {id:'p4',texto:'Sobre el uso del celular durante el horario de trabajo en el minimarket:',opciones:[
+    {t:'Lo reviso cuando no hay clientes; es algo normal y no afecta mi trabajo.',p:-2},
+    {t:'Lo mantengo guardado; solo lo uso en mi refrigerio y en emergencias reales.',p:3},
+    {t:'Lo tengo a la vista por si alguien llama o si tengo que coordinar algo familiar.',p:-1},
+    {t:'Lo uso también para calcular precios rápido cuando el cliente compra varios productos.',p:2}]},
+  {id:'p5',texto:'Al cerrar el día, el sistema muestra S/ 30 de más respecto a lo que hay físicamente en caja. ¿Qué haces?',opciones:[
+    {t:'Lo pongo como sobrante y lo reporto en el cierre del mes, para no hacer ajustes diarios.',p:-1},
+    {t:'Lo reporto por escrito a la encargada en el momento y dejo constancia firmada.',p:3},
+    {t:'Reviso las boletas del día para ver si fue un vuelto mal dado y aviso de inmediato.',p:2},
+    {t:'Lo guardo en un sobre con una nota y lo comento al día siguiente.',p:0}]},
+  {id:'p6',texto:'¿Cómo reaccionas si te dicen que tu horario cambiará la próxima semana (mañana por tarde)?',opciones:[
+    {t:'Me adapto, entiendo que la tienda lo necesita; luego coordino detalles con la encargada.',p:3},
+    {t:'Aviso que no puedo, tengo otras responsabilidades asumidas para ese horario.',p:-1},
+    {t:'Lo converso con mis compañeras primero para ver quién puede apoyar.',p:-1},
+    {t:'Pregunto el motivo y coordino con la encargada cómo organizarnos.',p:3}]}
+];
+
+/* ============================================================
+   SECCIÓN 2: COMUNICACIÓN (5)
+   ============================================================ */
+const PREGUNTAS_COMUNICACION = [
+  {id:'co1',texto:'Un cliente frecuente del barrio se queja en voz alta porque el precio del arroz subió otra vez. Hay otros clientes escuchando. ¿Qué haces?',opciones:[
+    {t:'Le explico con calma que el precio subió por el proveedor, le muestro una alternativa similar y le agradezco la preferencia.',p:3},
+    {t:'Le digo que es culpa del proveedor y que yo no decido los precios; que así está en todos lados.',p:-1},
+    {t:'Le digo "así está en todos lados" y sigo con mi trabajo.',p:-2},
+    {t:'Le comento si hay alguna oferta del día o un producto similar de menor precio para que se lleve algo igual.',p:3}]},
+  {id:'co2',texto:'Una señora mayor busca un producto específico y no lo encuentra en las góndolas. ¿Qué haces?',opciones:[
+    {t:'Le digo el pasillo donde puede estar y sigo con lo que estaba haciendo.',p:-1},
+    {t:'La acompaño al pasillo; si no lo tenemos, le ofrezco una alternativa similar o le digo cuándo llegará.',p:3},
+    {t:'Le digo que pregunte a la encargada, ella conoce mejor el inventario.',p:0},
+    {t:'Le digo que revise bien, seguro está en otra góndola.',p:-2}]},
+  {id:'co3',texto:'Un cliente frecuente del barrio te pide que le fíes la compra porque "a fin de mes te paga todo". ¿Cuál es la mejor respuesta?',opciones:[
+    {t:'Le digo que no está permitido, y le ofrezco alternativas: pagar con Yape/Plin, llevar solo lo esencial, o volver con efectivo.',p:3},
+    {t:'Le fío, la confianza con los vecinos es importante; total, siempre paga.',p:-3},
+    {t:'Le digo que sí pero lo anoto en un cuaderno aparte para no olvidarlo.',p:-2},
+    {t:'Le digo que le pregunte a la encargada, que eso no lo decido yo.',p:0}]},
+  {id:'co4',texto:'Es hora punta, hay 2 clientes esperando en caja y otro cliente pregunta desde la góndola el precio de un producto. ¿Qué haces?',opciones:[
+    {t:'Termino de cobrar tranquilo y luego atiendo la consulta; el orden es lo primero.',p:-1},
+    {t:'Respondo la consulta en voz alta mientras sigo cobrando, sin dejar de atender la caja.',p:3},
+    {t:'Ignoro la consulta hasta que termine de cobrar a los 2 clientes.',p:-2},
+    {t:'Le digo al que pregunta que espere a que termine la fila y le atiendo después.',p:0}]},
+  {id:'co5',texto:'¿Cómo describirías tu estilo al atender a un cliente nuevo en un minimarket de barrio?',opciones:[
+    {t:'Rápido y directo: cobro bien, sin perder tiempo, para que la fila avance.',p:0},
+    {t:'Cercano y cordial: me gusta reconocer a los vecinos, saber qué compran, hacer una broma breve si se presta.',p:3},
+    {t:'Respetuoso y tranquilo: dejo que el cliente tome la iniciativa.',p:-1},
+    {t:'Con buena energía: un saludo alegre y una sonrisa siempre hacen que el cliente vuelva.',p:3}]}
+];
+
+/* ============================================================
+   SECCIÓN 3: INVENTARIO Y REPOSICIÓN (3) — NUEVA
+   ============================================================ */
+const PREGUNTAS_INVENTARIO = [
+  {id:'inv1',texto:'Empiezas tu turno y la encargada te pide revisar el estante de bebidas. Al contar físicamente encuentras: 8 gaseosas de 3L, 5 de 1.5L y 0 de 500ml. En el sistema dice que debería haber 8 de 3L, 5 de 1.5L y 12 de 500ml. ¿Qué haces?',
+    extra:`<table class="inv-table">
+      <tr><th>Producto</th><th>Físico</th><th>Sistema</th></tr>
+      <tr><td>Gaseosa 3L</td><td>8</td><td>8</td></tr>
+      <tr><td>Gaseosa 1.5L</td><td>5</td><td>5</td></tr>
+      <tr><td>Gaseosa 500ml</td><td>0</td><td>12</td></tr>
+    </table>`,
+    opciones:[
+      {t:'Anoto todo en un papel y lo comento con la encargada al final del turno.',p:-1},
+      {t:'Aviso de inmediato a la encargada, verifico si hubo ventas no registradas o si llegó un pedido que no se ingresó al sistema, y repongo antes de que se acabe el turno.',p:3},
+      {t:'Repongo solo las de 500ml del almacén y no comento nada; total, ya se solucionó.',p:0},
+      {t:'Asumo que fue un error del sistema y lo dejo así; no es mi responsabilidad.',p:-2}]},
+  {id:'inv2',texto:'Estás reponiendo leche evaporada en la góndola. En el almacén tienes cajas con dos fechas de vencimiento distintas. ¿Cómo las ordenas en la góndola?',
+    opciones:[
+      {t:'Pongo al frente las más nuevas y al fondo las más antiguas, así lo primero que ve el cliente es producto fresco.',p:-2},
+      {t:'Pongo al frente las más antiguas (próximas a vencer) y al fondo las nuevas; así roto el stock y evito que se me venzan.',p:3},
+      {t:'Las mezclo; da igual mientras estén todas a la vista.',p:-2},
+      {t:'Pongo al frente las que tienen el empaque más bonito, para llamar la atención del cliente.',p:-1}]},
+  {id:'inv3',texto:'Un proveedor te deja una caja de 24 yogures. Solo tienes espacio para 15 en la góndola. ¿Qué haces con los 9 restantes?',
+    opciones:[
+      {t:'Los dejo en la caja del proveedor en la trastienda; cuando se acabe la góndola, bajo más.',p:-1},
+      {t:'Los guardo en el almacén, ordenados por fecha de vencimiento, anotando la fecha de ingreso y ubicándolos de forma visible para reponer a tiempo.',p:3},
+      {t:'Los pongo encima de la góndola; así están a la vista y no pierdo tiempo.',p:-1},
+      {t:'Los reparto entre las otras góndolas para que no queden en almacén.',p:0}]}
+];
+
+/* ============================================================
+   SECCIÓN 4: DETECCIÓN DE VENCIMIENTOS (2) — NUEVA
+   ============================================================ */
+const PREGUNTAS_VENCIMIENTOS = [
+  {id:'v1',texto:'Hoy es 19 de noviembre y estás revisando los productos refrigerados. Encuentras estos 4 productos. ¿Cuál retiras de la venta PRIMERO?',
+    extra:`<div class="venc-card ok"><div><div class="prod-nom">🥛 Leche Gloria 400g</div><div class="fecha">Vence: 25/11</div></div><span class="chip good">6 días</span></div>
+      <div class="venc-card peligro"><div><div class="prod-nom">🥣 Yogurt Laive 1L</div><div class="fecha">Vence: 20/11</div></div><span class="chip bad">1 día</span></div>
+      <div class="venc-card aviso"><div><div class="prod-nom">🧀 Queso fresco 250g</div><div class="fecha">Vence: 22/11</div></div><span class="chip warn">3 días</span></div>
+      <div class="venc-card ok"><div><div class="prod-nom">🧈 Mantequilla 200g</div><div class="fecha">Vence: 30/11</div></div><span class="chip good">11 días</span></div>`,
+    opciones:[
+      {t:'La mantequilla, porque es lo que menos se vende y podría quedarse hasta vencer.',p:-2},
+      {t:'El yogurt Laive, porque vence mañana; lo separo y aviso a la encargada para que decida si se oferta o se retira.',p:3},
+      {t:'La leche, porque es lo primero que se vence después del yogurt.',p:0},
+      {t:'El queso, porque es el más delicado de los cuatro.',p:-1}]},
+  {id:'v2',texto:'¿Cuál es la mejor práctica para evitar vender productos vencidos en un minimarket?',
+    opciones:[
+      {t:'Revisar todos los productos una vez al mes, cuando llega el inventario general.',p:-2},
+      {t:'Revisar fechas de vencimiento cada mañana al abrir y cada noche al cerrar, separando lo próximo a vencer en una zona especial para ofertarlo o retirarlo.',p:3},
+      {t:'Confiar en que el proveedor repone antes de que venza; para eso está.',p:-3},
+      {t:'Solo revisar los productos refrigerados; los secos duran mucho.',p:-2}]}
+];
+
+/* ============================================================
+   SECCIÓN 5: YAPE / PLIN Y COBROS DIGITALES (3) — NUEVA
+   ============================================================ */
+const PREGUNTAS_YAPE = [
+  {id:'y1',texto:'Un cliente te dice que ya te yapeó S/ 45, pero tu celular no muestra ninguna notificación. ¿Qué haces?',
+    opciones:[
+      {t:'Le creo; si dice que ya pagó, es porque ya pagó; le entrego la compra.',p:-3},
+      {t:'Le digo que no me llegó nada y le entrego la compra igual, para no hacerlo esperar.',p:-2},
+      {t:'Le pido amablemente que me muestre la constancia en su celular (con la hora y el número de operación) y verifico en mi app que aparezca el pago. Si no llega en 1 minuto, le pido que reintente.',p:3},
+      {t:'Le digo que no puedo cobrar con Yape porque no me funciona y que pague en efectivo.',p:-1}]},
+  {id:'y2',texto:'Un cliente quiere pagar con Yape un monto de S/ 480. Su app tiene un límite diario de S/ 500 y ya había pagado S/ 100 más temprano. ¿Qué haces?',
+    opciones:[
+      {t:'Le digo que no se puede y le pido que vuelva mañana.',p:-1},
+      {t:'Le explico que le queda S/ 400 disponibles en Yape; le ofrezco pagar S/ 400 por Yape y los S/ 80 restantes en efectivo o con otro medio.',p:3},
+      {t:'Le digo que intente igual; a veces la app deja pasar el monto completo.',p:-2},
+      {t:'Le pido que pague todo en efectivo porque Yape tiene límites.',p:0}]},
+  {id:'y3',texto:'Cuando cobras con Yape o Plin, ¿qué debes verificar SIEMPRE antes de entregar el producto?',
+    opciones:[
+      {t:'Que el cliente tenga la app abierta; con eso basta.',p:-2},
+      {t:'Que la notificación del pago haya llegado a mi celular o al de la tienda, y que coincida el monto y el nombre con la operación mostrada por el cliente.',p:3},
+      {t:'Que el cliente me muestre una foto del voucher que guardó en su galería.',p:-3},
+      {t:'Que el nombre del cliente esté escrito correctamente en el sistema.',p:0}]}
+];
+
+/* ============================================================
+   SECCIÓN 6: MEMORIA VISUAL
+   ============================================================ */
+const PRODUCTOS_MEMORIA = [
+  {emoji:'🍚',n:'Arroz 5 kg',p:22},
+  {emoji:'🥛',n:'Leche 1 L',p:5},
+  {emoji:'🥤',n:'Gaseosa 3 L',p:15},
+  {emoji:'🧴',n:'Detergente 1 kg',p:12}
+];
+const PREGUNTAS_MEMORIA = [
+  {id:'m1',t:'¿Cuánto costaba el arroz 🍚?',ops:['S/ 12','S/ 15','S/ 22','S/ 5'],ok:2},
+  {id:'m2',t:'¿Qué producto tenía el precio más bajo?',ops:['🥛 Leche','🍚 Arroz','🥤 Gaseosa','🧴 Detergente'],ok:0},
+  {id:'m3',t:'¿Cuánto costaba la gaseosa 🥤?',ops:['S/ 12','S/ 15','S/ 22','S/ 5'],ok:1},
+  {id:'m4',t:'¿Cuántos productos había en la góndola?',ops:['3','4','5','6'],ok:1}
+];
+
+/* ============================================================
+   SECCIÓN 7: CÁLCULO
+   ============================================================ */
+const PREGUNTAS_CALCULO = [
+  {id:'c1',t:'Un cliente compra: arroz S/ 22 + detergente S/ 12 + gaseosa S/ 15. Paga con S/ 100. ¿Cuál es el vuelto?',ops:['S/ 51','S/ 41','S/ 61','S/ 49'],ok:0},
+  {id:'c2',t:'Aplica un 20% de descuento a un producto de S/ 80. ¿Cuál es el precio final?',ops:['S/ 60','S/ 64','S/ 66','S/ 68'],ok:1},
+  {id:'c3',t:'Cuadre del día: ventas S/ 1420. En caja hay S/ 1380 + Yape/Plin S/ 25. ¿Falta o sobra y cuánto?',ops:['Falta S/ 15','Sobra S/ 15','Falta S/ 25','Está exacto'],ok:0},
+  {id:'c4',t:'Un cliente paga S/ 50 por 3 productos de S/ 12 cada uno. ¿Cuál es el vuelto?',ops:['S/ 12','S/ 14','S/ 16','S/ 18'],ok:1}
+];
+
+/* ============================================================
+   SECCIÓN 8: PREGUNTAS ABIERTAS
+   ============================================================ */
+const PREGUNTAS_ABIERTAS = [
+  {id:'a1',t:'Cuéntanos brevemente tu último trabajo o, si nunca has trabajado, una situación donde asumiste una responsabilidad. Incluye la inicial del nombre de una persona involucrada y el mes aproximado.',maxPalabras:70},
+  {id:'a2',t:'Un cliente frecuente del barrio te pide que le fíes la compra (le anotes en un cuaderno) porque "a fin de mes te paga todo". ¿Qué le dirías? Escribe EXACTAMENTE las palabras que usarías, como si estuvieras hablando con él.',maxPalabras:60}
+];
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function $(id){return document.getElementById(id);}
+function render(html){$('app').innerHTML=html;}
+function encodeRes(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))));}
+function decodeRes(c){try{return JSON.parse(decodeURIComponent(escape(atob(c.trim()))));}catch(e){return null;}}
+function emailYaUsado(email){
+  try{
+    const lista=JSON.parse(localStorage.getItem('postulantes_minimarket')||'[]');
+    return lista.some(r=>(r.correo||'').toLowerCase().trim()===email.toLowerCase().trim());
+  }catch(e){return false;}
+}
+
+let S={registro:{},respuestas:{personalidad:{},comunicacion:{},inventario:{},vencimientos:{},yape:{},memoria:{},calculo:{},abiertas:{}},orden:{},flags:{tab:0,paste:0,inicio:null,fin:null},timers:{calculoInterval:null,calculoRestante:0,tiemposCalculo:[]}};
+
+function vRegistro(){
+  const distritos=DISTRITOS_LIMA.map(d=>`<option value="${d}">${d}</option>`).join('');
+  const grados=GRADOS.map(g=>`<option value="${g}">${g}</option>`).join('');
+  render(`
+  <div class="card">
+    <h2>📋 Datos del postulante</h2>
+    <div class="notice info">Completa tus datos y luego continúa con el test. El proceso tiene 4 etapas: test → entrevista → prueba en tienda (2 h) → aprobación y contrato.</div>
+    <div class="notice danger" style="font-size:12px"><b>Requisitos:</b> edad mínima <b>${EDAD_MINIMA} años</b> · cada correo puede rendir el test <b>una sola vez</b>.</div>
+    <form id="fReg" onsubmit="return guardarRegistro(event)">
+      <div class="field"><label>Nombre completo *</label><input required name="nombre" placeholder="Ej. Rosa Elena Vargas Huamán"></div>
+      <div class="row">
+        <div class="field"><label>Número de documento *</label><input required name="dni" pattern="[0-9]{8,12}" title="Solo números (8 a 12 dígitos)" placeholder="Ej. 74581236"></div>
+        <div class="field"><label>Edad * (mín. ${EDAD_MINIMA})</label><input required name="edad" type="number" min="${EDAD_MINIMA}" max="70" placeholder="Ej. 24"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Correo electrónico *</label><input required name="correo" type="email" placeholder="tucorreo@gmail.com"></div>
+        <div class="field"><label>Número telefónico *</label><input required name="telefono" pattern="[0-9+ ]{9,15}" placeholder="Ej. 987654321"></div>
+      </div>
+      <div class="field"><label>Grado de instrucción *</label><select required name="grado"><option value="">-- Selecciona --</option>${grados}</select></div>
+      <div class="field"><label>Distrito de residencia *</label><select required name="distrito"><option value="">-- Selecciona --</option>${distritos}</select></div>
+      <div class="row">
+        <div class="field"><label>Modalidad *</label><select required name="modalidad" onchange="actualizarTurno()"><option value="">-- Selecciona --</option><option value="Full time">Full time</option><option value="Part time">Part time</option></select></div>
+        <div class="field"><label>Permanencia mínima *</label><select required name="permanencia"><option value="">-- Selecciona --</option><option value="3 meses">3 meses</option><option value="6 meses">6 meses</option><option value="Más de un año">Más de un año</option></select></div>
+      </div>
+      <div class="field"><label>Turno disponible *</label><select required name="turno" id="selTurno"><option value="">-- Primero elige modalidad --</option></select></div>
+      <div class="row">
+        <div class="field"><label>Disponibilidad inmediata *</label><select required name="disponibilidad"><option value="">-- Selecciona --</option><option value="Sí">Sí</option><option value="No">No</option></select></div>
+        <div class="field"><label>Aspiración económica (S/) *</label><input required name="sueldo" type="number" min="0" step="50" placeholder="Ej. 1500"></div>
+      </div>
+      <button class="btn btn-full" type="submit">Continuar al test →</button>
+    </form>
+  </div>`);
+}
+function actualizarTurno(){
+  const m=document.querySelector('[name=modalidad]').value;
+  const sel=$('selTurno');
+  let op='<option value="">-- Selecciona turno --</option>';
+  if(m==='Full time'){op+='<option value="9:00 a 18:00 (1 h refrigerio)">9:00 a 18:00 (1 h refrigerio)</option><option value="14:00 a 22:00">14:00 a 22:00</option>';}
+  else if(m==='Part time'){op+='<option value="10:00 a 14:00">10:00 a 14:00</option><option value="18:00 a 22:00">18:00 a 22:00</option>';}
+  sel.innerHTML=op;
+}
+function guardarRegistro(e){
+  e.preventDefault();
+  const reg=Object.fromEntries(new FormData(e.target));
+  if(+reg.edad < EDAD_MINIMA){alert('❌ Debes tener al menos '+EDAD_MINIMA+' años para postular. Edad registrada: '+reg.edad);return false;}
+  if(emailYaUsado(reg.correo)){alert('❌ Este correo ya fue registrado en una postulación anterior.\n\nCada correo puede rendir el test UNA sola vez.');return false;}
+  S.registro=reg;
+  PREGUNTAS_PERSONALIDAD.forEach(q=>{S.orden[q.id]=shuffle(q.opciones.map((o,i)=>({...o,orig:i})));});
+  PREGUNTAS_COMUNICACION.forEach(q=>{S.orden[q.id]=shuffle(q.opciones.map((o,i)=>({...o,orig:i})));});
+  PREGUNTAS_INVENTARIO.forEach(q=>{S.orden[q.id]=shuffle(q.opciones.map((o,i)=>({...o,orig:i})));});
+  PREGUNTAS_VENCIMIENTOS.forEach(q=>{S.orden[q.id]=shuffle(q.opciones.map((o,i)=>({...o,orig:i})));});
+  PREGUNTAS_YAPE.forEach(q=>{S.orden[q.id]=shuffle(q.opciones.map((o,i)=>({...o,orig:i})));});
+  PREGUNTAS_MEMORIA.forEach(q=>{S.orden[q.id]=shuffle(q.ops.map((o,i)=>({o,i})));});
+  PREGUNTAS_CALCULO.forEach(q=>{S.orden[q.id]=shuffle(q.ops.map((o,i)=>({o,i})));});
+  S.flags.inicio=Date.now();
+  vIntroTest();
+  return false;
+}
+
+function vIntroTest(){
+  render(`
+  <div class="card">
+    <h2>📝 Test de selección — Mini Market</h2>
+    <div class="notice danger">
+      <b>Lee con atención:</b> este test tiene 8 secciones:
+      <ol style="margin:8px 0 0 18px">
+        <li>Personalidad y actitud (6 preguntas)</li>
+        <li>Comunicación y atención al público (5 preguntas)</li>
+        <li>Inventario y reposición (3 preguntas)</li>
+        <li>Detección de vencimientos (2 preguntas)</li>
+        <li>Yape, Plin y cobros digitales (3 preguntas)</li>
+        <li>Prueba de memoria visual (con tiempo limitado)</li>
+        <li>Prueba de cálculo para caja (⏱️ 50 segundos por pregunta)</li>
+        <li>Dos preguntas abiertas finales</li>
+      </ol>
+    </div>
+    <div class="notice">⚠️ El sistema registra el tiempo, los cambios de pestaña y los intentos de copiar/pegar. Responde con sinceridad. <b>No busques respuestas en internet o con IA.</b></div>
+    <button class="btn btn-full" onclick="vPersonalidad(0)">Comenzar test →</button>
+  </div>`);
+}
+
+function vPersonalidad(i){
+  if(i>=PREGUNTAS_PERSONALIDAD.length){return vComunicacion(0);}
+  const q=PREGUNTAS_PERSONALIDAD[i],ops=S.orden[q.id],total=PREGUNTAS_PERSONALIDAD.length,prog=(i/total)*100;
+  render(`
+  <div class="card">
+    <div class="progress"><div style="width:${prog}%"></div></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Pregunta ${i+1} de ${total} · Sección 1 — Personalidad</p>
+    <h2>${esc(q.texto)}</h2>
+    <div id="ops">${ops.map((o,k)=>`<label class="opt" onclick="selPers('${q.id}',${k},'${esc(o.t).replace(/'/g,"\\'")}',${o.p})">${esc(o.t)}</label>`).join('')}</div>
+    <button class="btn" id="btnNext" disabled onclick="vPersonalidad(${i+1})">Siguiente →</button>
+  </div>`);
+  window.selPers=function(qid,k,txt,p){S.respuestas.personalidad[qid]={txt,p};document.querySelectorAll('#ops .opt').forEach(el=>el.classList.remove('sel'));document.querySelectorAll('#ops .opt')[k].classList.add('sel');$('btnNext').disabled=false;};
+}
+
+function vComunicacion(i){
+  if(i>=PREGUNTAS_COMUNICACION.length){return vInventario(0);}
+  const q=PREGUNTAS_COMUNICACION[i],ops=S.orden[q.id],total=PREGUNTAS_COMUNICACION.length,prog=(i/total)*100;
+  render(`
+  <div class="card">
+    <div class="progress"><div style="width:${prog}%"></div></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Pregunta ${i+1} de ${total} · Sección 2 — Comunicación</p>
+    <h2>${esc(q.texto)}</h2>
+    <div id="opsC">${ops.map((o,k)=>`<label class="opt" onclick="selCom('${q.id}',${k},'${esc(o.t).replace(/'/g,"\\'")}',${o.p})">${esc(o.t)}</label>`).join('')}</div>
+    <button class="btn" id="btnCom" disabled onclick="vComunicacion(${i+1})">Siguiente →</button>
+  </div>`);
+  window.selCom=function(qid,k,txt,p){S.respuestas.comunicacion[qid]={txt,p};document.querySelectorAll('#opsC .opt').forEach(el=>el.classList.remove('sel'));document.querySelectorAll('#opsC .opt')[k].classList.add('sel');$('btnCom').disabled=false;};
+}
+
+/* === SECCIÓN 3: INVENTARIO === */
+function vInventario(i){
+  if(i>=PREGUNTAS_INVENTARIO.length){return vVencimientos(0);}
+  const q=PREGUNTAS_INVENTARIO[i],ops=S.orden[q.id],total=PREGUNTAS_INVENTARIO.length,prog=(i/total)*100;
+  render(`
+  <div class="card">
+    <div class="progress"><div style="width:${prog}%"></div></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Pregunta ${i+1} de ${total} · Sección 3 — Inventario y reposición</p>
+    <h2>${esc(q.texto)}</h2>
+    ${q.extra||''}
+    <div id="opsI" style="margin-top:14px">${ops.map((o,k)=>`<label class="opt" onclick="selInv('${q.id}',${k},'${esc(o.t).replace(/'/g,"\\'")}',${o.p})">${esc(o.t)}</label>`).join('')}</div>
+    <button class="btn" id="btnInv" disabled onclick="vInventario(${i+1})">Siguiente →</button>
+  </div>`);
+  window.selInv=function(qid,k,txt,p){S.respuestas.inventario[qid]={txt,p};document.querySelectorAll('#opsI .opt').forEach(el=>el.classList.remove('sel'));document.querySelectorAll('#opsI .opt')[k].classList.add('sel');$('btnInv').disabled=false;};
+}
+
+/* === SECCIÓN 4: VENCIMIENTOS === */
+function vVencimientos(i){
+  if(i>=PREGUNTAS_VENCIMIENTOS.length){return vYape(0);}
+  const q=PREGUNTAS_VENCIMIENTOS[i],ops=S.orden[q.id],total=PREGUNTAS_VENCIMIENTOS.length,prog=(i/total)*100;
+  render(`
+  <div class="card">
+    <div class="progress"><div style="width:${prog}%"></div></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Pregunta ${i+1} de ${total} · Sección 4 — Detección de vencimientos</p>
+    <h2>${esc(q.texto)}</h2>
+    ${q.extra||''}
+    <div id="opsV" style="margin-top:14px">${ops.map((o,k)=>`<label class="opt" onclick="selVenc('${q.id}',${k},'${esc(o.t).replace(/'/g,"\\'")}',${o.p})">${esc(o.t)}</label>`).join('')}</div>
+    <button class="btn" id="btnVenc" disabled onclick="vVencimientos(${i+1})">Siguiente →</button>
+  </div>`);
+  window.selVenc=function(qid,k,txt,p){S.respuestas.vencimientos[qid]={txt,p};document.querySelectorAll('#opsV .opt').forEach(el=>el.classList.remove('sel'));document.querySelectorAll('#opsV .opt')[k].classList.add('sel');$('btnVenc').disabled=false;};
+}
+
+/* === SECCIÓN 5: YAPE / PLIN === */
+function vYape(i){
+  if(i>=PREGUNTAS_YAPE.length){return vMemoria1();}
+  const q=PREGUNTAS_YAPE[i],ops=S.orden[q.id],total=PREGUNTAS_YAPE.length,prog=(i/total)*100;
+  render(`
+  <div class="card">
+    <div class="progress"><div style="width:${prog}%"></div></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Pregunta ${i+1} de ${total} · Sección 5 — Yape / Plin</p>
+    <h2>${esc(q.texto)}</h2>
+    <div id="opsY">${ops.map((o,k)=>`<label class="opt" onclick="selYape('${q.id}',${k},'${esc(o.t).replace(/'/g,"\\'")}',${o.p})">${esc(o.t)}</label>`).join('')}</div>
+    <button class="btn" id="btnYape" disabled onclick="vYape(${i+1})">Siguiente →</button>
+  </div>`);
+  window.selYape=function(qid,k,txt,p){S.respuestas.yape[qid]={txt,p};document.querySelectorAll('#opsY .opt').forEach(el=>el.classList.remove('sel'));document.querySelectorAll('#opsY .opt')[k].classList.add('sel');$('btnYape').disabled=false;};
+}
+
+function vMemoria1(){
+  render(`
+  <div class="card">
+    <h2>🧠 Prueba de memoria visual</h2>
+    <div class="notice" style="background:#fef3c7;border-color:#f59e0b;color:#78350f">🛒 Observa con calma estos <b>4 productos</b> de la góndola y sus precios. Tendrás <b>20 segundos</b> para memorizarlos. ¡Respira y concéntrate!</div>
+    <div class="timer" id="tmr" style="color:#f59e0b">20</div>
+    <div class="mem-grid">
+      ${PRODUCTOS_MEMORIA.map(p=>`<div class="mem-card"><span class="emoji">${p.emoji}</span><div class="nom">${esc(p.n)}</div><div class="precio">S/ ${p.p}</div></div>`).join('')}
+    </div>
+  </div>`);
+  let t=20;
+  const iv=setInterval(()=>{t--;const el=$('tmr');if(el)el.textContent=t;if(t<=0){clearInterval(iv);vMemoria2();}},1000);
+}
+function vMemoria2(){
+  render(`
+  <div class="card">
+    <h2>🧠 Preguntas de memoria visual</h2>
+    <div class="notice info">Responde según lo que recuerdes. No vuelvas atrás.</div>
+    ${PREGUNTAS_MEMORIA.map((q,i)=>`
+      <div class="field">
+        <label>${i+1}. ${esc(q.t)}</label>
+        <div>${S.orden[q.id].map((o,k)=>`<label class="opt" onclick="selMem('${q.id}',${k},'${esc(o.o)}',${o.i})">${esc(o.o)}</label>`).join('')}</div>
+      </div>`).join('')}
+    <button class="btn" id="btnMem" disabled onclick="vCalculo(0)">Continuar →</button>
+  </div>`);
+  window.selMem=function(qid,k,txt,origIdx){
+    S.respuestas.memoria[qid]={txt,origIdx,correcta:PREGUNTAS_MEMORIA.find(p=>p.id===qid).ok===origIdx};
+    const q=PREGUNTAS_MEMORIA.find(p=>p.id===qid),idx=PREGUNTAS_MEMORIA.indexOf(q),cont=document.querySelectorAll('.field')[idx];
+    cont.querySelectorAll('.opt').forEach(el=>el.classList.remove('sel'));
+    cont.querySelectorAll('.opt')[k].classList.add('sel');
+    if(Object.keys(S.respuestas.memoria).length===PREGUNTAS_MEMORIA.length)$('btnMem').disabled=false;
+  };
+}
+
+function vCalculo(i){
+  if(i>=PREGUNTAS_CALCULO.length){return vAbiertas();}
+  const q=PREGUNTAS_CALCULO[i],ops=S.orden[q.id],total=PREGUNTAS_CALCULO.length,prog=(i/total)*100;
+  render(`
+  <div class="card">
+    <div class="progress"><div style="width:${prog}%"></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <p style="font-size:12px;color:var(--muted)">Pregunta ${i+1} de ${total} · Sección 7 — Caja</p>
+      <p style="font-size:13px;font-weight:700;color:var(--accent)">⏱️ <span id="tmrCalc">${TIEMPO_POR_CALCULO}</span> s</p>
+    </div>
+    <div class="timer-bar"><div id="barCalc" style="width:100%"></div></div>
+    <h2>${esc(q.t)}</h2>
+    <div id="opsCal">${ops.map((o,k)=>`<label class="opt" onclick="selCal('${q.id}',${k},'${esc(o.o)}',${o.i})">${esc(o.o)}</label>`).join('')}</div>
+    <button class="btn" id="btnCal" disabled onclick="siguienteCalculo(${i})">Siguiente →</button>
+  </div>`);
+  window.selCal=function(qid,k,txt,origIdx){
+    S.respuestas.calculo[qid]={txt,origIdx,correcta:PREGUNTAS_CALCULO.find(p=>p.id===qid).ok===origIdx};
+    document.querySelectorAll('#opsCal .opt').forEach(el=>el.classList.remove('sel'));
+    document.querySelectorAll('#opsCal .opt')[k].classList.add('sel');
+    $('btnCal').disabled=false;
+  };
+  iniciarTimerCalculoPregunta(i);
+}
+function iniciarTimerCalculoPregunta(indice){
+  detenerTimerCalculo();
+  S.timers.calculoRestante=TIEMPO_POR_CALCULO;
+  S.timers.calculoInterval=setInterval(()=>{
+    S.timers.calculoRestante--;
+    const t=S.timers.calculoRestante,el=$('tmrCalc'),bar=$('barCalc');
+    if(el){el.textContent=t;el.parentElement.style.color=t<=15?'var(--bad)':'var(--accent)';}
+    if(bar){bar.style.width=(Math.max(t,0)/TIEMPO_POR_CALCULO*100)+'%';}
+    if(t<=0){
+      detenerTimerCalculo();
+      S.timers.tiemposCalculo[indice]=TIEMPO_POR_CALCULO;
+      const qid=PREGUNTAS_CALCULO[indice].id;
+      if(!S.respuestas.calculo[qid])S.respuestas.calculo[qid]={txt:'(sin responder)',origIdx:-1,correcta:false};
+      vCalculo(indice+1);
+    }
+  },1000);
+}
+function siguienteCalculo(i){
+  const qid=PREGUNTAS_CALCULO[i].id;
+  S.timers.tiemposCalculo[i]=TIEMPO_POR_CALCULO-S.timers.calculoRestante;
+  detenerTimerCalculo();
+  if(!S.respuestas.calculo[qid])S.respuestas.calculo[qid]={txt:'(sin responder)',origIdx:-1,correcta:false};
+  vCalculo(i+1);
+}
+function detenerTimerCalculo(){if(S.timers.calculoInterval){clearInterval(S.timers.calculoInterval);S.timers.calculoInterval=null;}}
+
+function vAbiertas(){
+  detenerTimerCalculo();
+  render(`
+  <div class="card">
+    <h2>✍️ Preguntas abiertas</h2>
+    <div class="notice danger"><b>Importante:</b> responde con tus propias palabras. No copies de internet ni de IA. El sistema detecta cambios de pestaña y copiado/pegado.</div>
+    ${PREGUNTAS_ABIERTAS.map((q,i)=>`
+      <div class="field">
+        <label>${i+1}. ${esc(q.t)} <span style="color:var(--muted);font-weight:400">(máx. ${q.maxPalabras} palabras)</span></label>
+        <textarea data-qid="${q.id}" data-max="${q.maxPalabras}" oninput="contarPalabras(this)" onpaste="marcarPaste(event)"></textarea>
+        <div class="counter"><span>0</span>/${q.maxPalabras} palabras</div>
+      </div>`).join('')}
+    <button class="btn btn-full" onclick="finalizarTest()">Finalizar y enviar test</button>
+  </div>`);
+}
+function contarPalabras(el){
+  const w=(el.value.trim().match(/\S+/g)||[]).length;
+  el.parentElement.querySelector('.counter span').textContent=w;
+  el.parentElement.querySelector('.counter').style.color=w>+el.dataset.max?'var(--bad)':'var(--muted)';
+}
+function marcarPaste(e){e.preventDefault();S.flags.paste++;alert('Por seguridad, no está permitido pegar texto. Escribe tu respuesta con tus propias palabras.');}
+
+function finalizarTest(){
+  detenerTimerCalculo();
+  const tas=document.querySelectorAll('textarea[data-qid]');
+  for(const t of tas){
+    if(t.value.trim().length<15){alert('Por favor responde todas las preguntas abiertas con al menos una frase.');t.focus();return;}
+    S.respuestas.abiertas[t.dataset.qid]=t.value.trim();
+  }
+  S.flags.fin=Date.now();
+  S.flags.tiempoTotal=Math.round((S.flags.fin-S.flags.inicio)/1000);
+
+  let pPers=0,maxPers=0;PREGUNTAS_PERSONALIDAD.forEach(q=>{pPers+=S.respuestas.personalidad[q.id]?.p??0;maxPers+=3;});
+  let pCom=0,maxCom=0;PREGUNTAS_COMUNICACION.forEach(q=>{pCom+=S.respuestas.comunicacion[q.id]?.p??0;maxCom+=3;});
+  let pInv=0,maxInv=0;PREGUNTAS_INVENTARIO.forEach(q=>{pInv+=S.respuestas.inventario[q.id]?.p??0;maxInv+=3;});
+  let pVenc=0,maxVenc=0;PREGUNTAS_VENCIMIENTOS.forEach(q=>{pVenc+=S.respuestas.vencimientos[q.id]?.p??0;maxVenc+=3;});
+  let pYape=0,maxYape=0;PREGUNTAS_YAPE.forEach(q=>{pYape+=S.respuestas.yape[q.id]?.p??0;maxYape+=3;});
+  let pMem=0;Object.values(S.respuestas.memoria).forEach(m=>{if(m.correcta)pMem++;});
+  let pCal=0;Object.values(S.respuestas.calculo).forEach(c=>{if(c.correcta)pCal++;});
+  const tiempoCalculoTotal=(S.timers.tiemposCalculo||[]).reduce((a,b)=>a+b,0);
+
+  const flags=[];
+  if(S.flags.tiempoTotal<TIEMPO_MINIMO_TEST)flags.push('Tiempo total muy bajo ('+S.flags.tiempoTotal+'s) — posible uso de IA o respuestas al azar.');
+  if(S.flags.tab>2)flags.push('Cambios de pestaña detectados ('+S.flags.tab+') — posible búsqueda externa.');
+  if(S.flags.paste>0)flags.push('Intento(s) de pegar texto ('+S.flags.paste+') — posible uso de IA.');
+  if(S.registro.modalidad==='Full time'&&S.registro.permanencia==='3 meses')flags.push('Coherencia: eligió Full time pero permanencia de solo 3 meses.');
+
+  const psico=auditarPsicometricamente({pPers,maxPers,pCom,maxCom,pInv,maxInv,pVenc,maxVenc,pYape,maxYape,pMem,pCal,tiemposCalculo:S.timers.tiemposCalculo,flags,S});
+
+  const resultado={
+    ...S.registro,fecha:new Date().toISOString(),
+    puntajes:{
+      personalidad:pPers,maxPersonalidad:maxPers,
+      comunicacion:pCom,maxComunicacion:maxCom,
+      inventario:pInv,maxInventario:maxInv,
+      vencimientos:pVenc,maxVencimientos:maxVenc,
+      yape:pYape,maxYape:maxYape,
+      memoria:pMem,maxMemoria:PREGUNTAS_MEMORIA.length,
+      calculo:pCal,maxCalculo:PREGUNTAS_CALCULO.length
+    },
+    tiempoCalculoTotal,tiemposCalculo:S.timers.tiemposCalculo,respuestas:S.respuestas,flags,
+    flagCount:{tab:S.flags.tab,paste:S.flags.paste,tiempoTotal:S.flags.tiempoTotal},
+    abiertas:S.respuestas.abiertas,psicometrico:psico
+  };
+
+  try{
+    const lista=JSON.parse(localStorage.getItem('postulantes_minimarket')||'[]');
+    lista.push(resultado);
+    localStorage.setItem('postulantes_minimarket',JSON.stringify(lista));
+  }catch(e){}
+
+  const code=encodeRes(resultado);
+  window.__lastResult=resultado;
+  window.__lastCode=code;
+
+  const waMsg = `Hola MINI MARKET 👋\n\n` +
+                `Terminé el test de evaluación de postulantes.\n\n` +
+                `👤 *Nombre:* ${S.registro.nombre}\n` +
+                `📋 *Modalidad:* ${S.registro.modalidad}\n` +
+                `⏰ *Turno:* ${S.registro.turno}\n` +
+                `📍 *Distrito:* ${S.registro.distrito}\n` +
+                `💰 *Aspiración:* S/ ${S.registro.sueldo}\n\n` +
+                `*Código de evaluación:*\n${code}\n\n` +
+                `Quedo atento a su respuesta. ¡Gracias!`;
+
+  const waUrl = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
+  const mailSubject = `Postulación MINI MARKET — ${S.registro.nombre}`;
+  const mailBody = waMsg.replace(/\*/g,'');
+  const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+
+  render(`
+  <div class="card" style="text-align:center">
+    <span class="success-icon">🎉</span>
+    <h2 style="font-size:22px;margin-bottom:6px">¡Test completado!</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto">
+      Tu evaluación fue registrada correctamente. Ahora envíala al <b>Mini Market</b> con un solo toque.
+    </p>
+    <a href="${waUrl}" target="_blank" rel="noopener" class="btn btn-wa btn-full">📱 Enviar resultado por WhatsApp</a>
+    <div class="notice success" style="margin-top:14px;text-align:left">✅ Al presionar el botón, WhatsApp se abrirá con el mensaje listo. Solo presiona <b>Enviar</b> y listo.</div>
+    <a href="${mailUrl}" class="btn btn-mail btn-full" style="margin-top:10px">📧 Enviar por correo (alternativa)</a>
+    <div style="margin-top:22px">
+      <button class="btn-ghost btn" style="font-size:12px;padding:8px 14px" onclick="toggleAvanzado()"><span id="toggleTxt">▼ Ver opciones avanzadas</span></button>
+    </div>
+    <div id="avanzado" style="display:none;margin-top:16px;text-align:left">
+      <div class="notice info" style="font-size:12px">Si el botón de WhatsApp no funcionó, copia este código y envíalo manualmente por WhatsApp al mismo número del aviso.</div>
+      <div class="code-box" id="cod">${code}</div>
+      <button class="btn btn-ghost btn-full" onclick="copiarCodigo()">📋 Copiar código</button>
+      <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="descargarJSON()">⬇️ Descargar JSON</button>
+    </div>
+    <div class="notice info" style="margin-top:22px;text-align:left;font-size:12px">🔒 Tu correo quedó registrado. No podrás rendir el test nuevamente con el mismo correo.</div>
+  </div>`);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleAvanzado(){const el=$('avanzado'),txt=$('toggleTxt');if(el.style.display==='none'){el.style.display='block';txt.textContent='▲ Ocultar opciones avanzadas';}else{el.style.display='none';txt.textContent='▼ Ver opciones avanzadas';}}
+function copiarCodigo(){const c=$('cod').textContent;navigator.clipboard.writeText(c).then(()=>alert('Código copiado al portapapeles.'));}
+function descargarJSON(){const blob=new Blob([JSON.stringify(window.__lastResult,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='postulacion_'+Date.now()+'.json';a.click();}
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden)S.flags.tab++;});
+
+/* AUDITORÍA PSICOMÉTRICA (ampliada con Atención Operativa) */
+function auditarPsicometricamente({pPers,maxPers,pCom,maxCom,pInv,maxInv,pVenc,maxVenc,pYape,maxYape,pMem,pCal,tiemposCalculo,flags,S}){
+  const resp=S.respuestas;
+  const pctPers=maxPers?(pPers/maxPers)*100:0;
+  const pctCom=maxCom?(pCom/maxCom)*100:0;
+  const pctInv=maxInv?(pInv/maxInv)*100:0;
+  const pctVenc=maxVenc?(pVenc/maxVenc)*100:0;
+  const pctYape=maxYape?(pYape/maxYape)*100:0;
+  const pctMem=(pMem/PREGUNTAS_MEMORIA.length)*100;
+  const pctCal=(pCal/PREGUNTAS_CALCULO.length)*100;
+  // NUEVA: Atención operativa = inventario + vencimientos + Yape
+  const operativa = (pctInv*0.4 + pctVenc*0.3 + pctYape*0.3);
+
+  let extro=pctCom*0.7+pctPers*0.3;
+  let amab=pctCom*0.5+pctPers*0.5;
+  let respo=pctPers*0.4+pctCal*0.3+operativa*0.3;
+  let estab=((resp.personalidad.p6?.p>=2?90:60)+(resp.personalidad.p2?.p>=2?90:60)+(resp.comunicacion.co4?.p>=2?90:60))/3;
+  let apert=pctPers*0.5+pctCom*0.2+operativa*0.3;
+  let resil=((resp.comunicacion.co3?.p>=2?90:50)+(resp.comunicacion.co5?.p>=2?90:55)+pctCom)/3;
+  if(resp.personalidad.p4?.p<0)respo-=15;
+  if(resp.personalidad.p5?.p<0)respo-=20;
+  if(resp.personalidad.p2?.p>=3)respo+=10;
+  if(resp.comunicacion.co2?.p>=3)extro+=10;
+  if(resp.comunicacion.co3?.p>=3)resil+=10;
+  if(resp.comunicacion.co1?.p>=3)extro+=5;
+  if(resp.inventario?.inv2?.p>=3)respo+=8;   // FIFO correcto
+  if(resp.vencimientos?.v1?.p>=3)operativa+=5; // retirar el correcto
+  if(resp.yape?.y1?.p>=3)respo+=8;             // no entregar sin verificar
+  const penal=flags.length*5;
+  extro=Math.max(0,Math.min(100,extro-penal*0.3));
+  amab=Math.max(0,Math.min(100,amab-penal*0.3));
+  respo=Math.max(0,Math.min(100,respo-penal*0.5));
+  estab=Math.max(0,Math.min(100,estab-penal*0.3));
+  apert=Math.max(0,Math.min(100,apert-penal*0.3));
+  resil=Math.max(0,Math.min(100,resil-penal*0.4));
+
+  const distrito=S.registro.distrito||'';
+  const cercaniaScore=PROXIMIDAD[distrito]??30;
+  const sueldoPedido=+S.registro.sueldo||0;
+  const modalidad=S.registro.modalidad;
+  let expectativaScore=0,expectativaNota='';
+  if(modalidad==='Full time'){
+    if(sueldoPedido>=1200&&sueldoPedido<=1600){expectativaScore=100;expectativaNota='Expectativa alineada al rango ideal para minimarket (~S/ 1,400).';}
+    else if(sueldoPedido>=1000&&sueldoPedido<1200){expectativaScore=75;expectativaNota='Expectativa algo por debajo del ideal; aceptable.';}
+    else if(sueldoPedido>1600&&sueldoPedido<=1900){expectativaScore=70;expectativaNota='Expectativa ligeramente por encima del ideal; negociable.';}
+    else if(sueldoPedido<1000){expectativaScore=45;expectativaNota='Expectativa muy baja: riesgo de rotación ante mejores ofertas.';}
+    else{expectativaScore=35;expectativaNota='Expectativa muy por encima del presupuesto del puesto.';}
+  } else {
+    if(sueldoPedido>=700&&sueldoPedido<=950){expectativaScore=100;expectativaNota='Expectativa alineada al rango ideal para part time (~S/ 850).';}
+    else if(sueldoPedido>=550&&sueldoPedido<700){expectativaScore=75;expectativaNota='Expectativa algo por debajo del ideal; aceptable.';}
+    else if(sueldoPedido>950&&sueldoPedido<=1150){expectativaScore=70;expectativaNota='Expectativa ligeramente por encima del ideal; negociable.';}
+    else if(sueldoPedido<550){expectativaScore=45;expectativaNota='Expectativa muy baja: riesgo de rotación.';}
+    else{expectativaScore=35;expectativaNota='Expectativa muy por encima del presupuesto del puesto.';}
+  }
+  const prom=(extro+amab+respo+estab+apert+resil+operativa+cercaniaScore+expectativaScore)/9;
+  let perfil,perfilColor;
+  if(prom>=78&&flags.length===0){perfil='PERFIL IDEAL — Colaborador estrella de minimarket';perfilColor='good';}
+  else if(prom>=65){perfil='PERFIL PROMETEDOR — Requiere refuerzo';perfilColor='warn';}
+  else if(prom>=50){perfil='PERFIL MODERADO — Evaluar con cuidado';perfilColor='warn';}
+  else{perfil='PERFIL DE RIESGO — No recomendado';perfilColor='bad';}
+  const riesgos=[];
+  if(estab<60)riesgos.push('Baja tolerancia a la corrección o al cambio de horario.');
+  if(respo<60)riesgos.push('Señales de descuido en caja o uso del celular en horario laboral.');
+  if(extro<60)riesgos.push('Actitud pasiva con el cliente; dificultad para romper el hielo.');
+  if(resil<60)riesgos.push('Dificultad para manejar objeciones de precio o pedidos de fiado.');
+  if(amab<60)riesgos.push('Baja empatía percibida; podría no conectar con clientes mayores o frecuentes.');
+  if(pctMem<50)riesgos.push('Memoria visual por debajo del promedio.');
+  if(pctCal<50)riesgos.push('Cálculo por debajo del estándar para manejo de caja.');
+  if(operativa<60)riesgos.push('Atención operativa baja: posibles fallas en inventario, rotación FIFO o cobros digitales.');
+  if(pctYape<60)riesgos.push('Debilidad en manejo de Yape/Plin: riesgo de entregar productos sin confirmar el pago.');
+  if(cercaniaScore<50)riesgos.push('Distrito de residencia lejano ('+distrito+'): riesgo de tardanzas o fatiga por viaje.');
+  if(expectativaScore<55)riesgos.push('Expectativa salarial no alineada: '+expectativaNota);
+  const fortalezas=[];
+  if(extro>=75)fortalezas.push('Facilidad para iniciar conversación y romper el hielo con clientes del barrio.');
+  if(amab>=75)fortalezas.push('Empatía marcada; genera confianza rápido con clientes frecuentes.');
+  if(respo>=75)fortalezas.push('Alto sentido de responsabilidad, especialmente en caja y manejo de mercadería.');
+  if(estab>=75)fortalezas.push('Estabilidad emocional frente a la presión de hora punta.');
+  if(resil>=75)fortalezas.push('Resiliencia comercial: maneja objeciones de precio y pedidos de fiado con tacto.');
+  if(apert>=75)fortalezas.push('Iniciativa y apertura al aprendizaje; ideal para crecer a encargado de turno.');
+  if(pctMem>=80)fortalezas.push('Memoria visual sobresaliente; útil para ubicar productos y recordar precios.');
+  if(pctCal>=80)fortalezas.push('Cálculo rápido y preciso para caja.');
+  if(pctInv>=80)fortalezas.push('Excelente manejo de inventario: detecta diferencias y rota stock correctamente.');
+  if(pctVenc>=80)fortalezas.push('Buen control de vencimientos: reconoce prioridades y evita vender productos vencidos.');
+  if(pctYape>=80)fortalezas.push('Manejo confiable de cobros digitales (Yape/Plin): verifica antes de entregar.');
+  if(cercaniaScore>=80)fortalezas.push('Reside muy cerca del centro laboral ('+distrito+'): alta disponibilidad y puntualidad probable.');
+  if(expectativaScore>=85)fortalezas.push('Expectativa salarial alineada con el puesto: '+expectativaNota);
+
+  const nombrePila=(S.registro.nombre||'').split(' ')[0]||'El postulante';
+  let narrativa=`<b>${nombrePila}</b> obtiene un perfil conductual promedio de <b>${Math.round(prom)}/100</b>. `;
+  narrativa+=`En comunicación y atención al público alcanza <b>${Math.round(pctCom)}%</b>, `;
+  narrativa+=pctCom>=75?'destacando su capacidad para generar cercanía con clientes frecuentes y manejar quejas con tacto. ':pctCom>=50?'mostrando margen de mejora en el manejo de objeciones y clientes difíciles. ':'reflejando timidez o baja iniciativa para interactuar con el público. ';
+  narrativa+=`En responsabilidad obtiene <b>${Math.round(pctPers)}%</b> y en cálculo de caja <b>${Math.round(pctCal)}%</b>. `;
+  narrativa+=`La memoria visual (${Math.round(pctMem)}%) `;
+  narrativa+=pctMem>=70?'es un punto fuerte: retiene con facilidad productos y precios. ':'sugiere reforzar atención al detalle. ';
+  narrativa+=`<br><br><b>📦 Atención operativa (nueva):</b> Inventario <b>${Math.round(pctInv)}%</b>, Vencimientos <b>${Math.round(pctVenc)}%</b>, Yape/Plin <b>${Math.round(pctYape)}%</b>. `;
+  narrativa+=operativa>=75?'Muy buen nivel operativo: maneja las tareas del día a día sin supervisión constante. ':operativa>=55?'Nivel operativo aceptable; requiere refuerzo en algún punto específico. ':'Nivel operativo débil: podría cometer errores en caja, reposición o cobros digitales. ';
+  narrativa+=`<br><br><b>📍 Contexto logístico y económico:</b> Reside en <b>${esc(distrito)}</b> (índice de cercanía a Jesús María: <b>${cercaniaScore}/100</b>). `;
+  narrativa+=cercaniaScore>=75?'Ubicación muy favorable: se espera buena puntualidad y disponibilidad inmediata. ':cercaniaScore>=50?'Distancia moderada; conviene confirmar tiempos reales de traslado en la entrevista. ':'Distancia considerable desde su residencia; verificar tolerancia al traslado diario. ';
+  narrativa+=`Su expectativa económica es <b>S/ ${sueldoPedido}</b> para modalidad ${modalidad}. `+expectativaNota;
+  if(flags.length){narrativa+=`<br><br><b>⚠️ Alertas de integridad:</b> `+flags.join(' ');}
+  else{narrativa+=`<br><br><b>✅ Sin alertas de integridad.</b> Test completado en ${S.flags.tiempoTotal}s sin cambios de pestaña ni pegados.`;}
+  narrativa+=`<br><br><b>Recomendación de la auditoría:</b> `;
+  const combinado=(prom*0.7)+(cercaniaScore*0.15)+(expectativaScore*0.15);
+  if(combinado>=75&&flags.length===0)narrativa+=`Avanzar a <b>entrevista presencial</b> y prueba en tienda de 2 horas. Alta probabilidad de encaje con el perfil MINI MARKET. Validar en entrevista: rapidez con caja, orden en reposición, detección de vencimientos y manejo de Yape/Plin.`;
+  else if(combinado>=60)narrativa+=`Citar a entrevista y centrar la evaluación en las dimensiones débiles, la logística de traslado y el manejo de hora punta. Reforzar la validación operativa con una prueba práctica corta.`;
+  else if(combinado>=45)narrativa+=`Mantener como reserva. Si no hay mejores candidatos, citar a entrevista y validar con prueba práctica de caja y reposición.`;
+  else narrativa+=`Descartar para atención al cliente. Podría considerarse para roles sin trato directo (almacén, carga y descarga).`;
+
+  return {
+    dimensiones:{
+      'Extroversión y carisma':Math.round(extro),
+      'Amabilidad y empatía':Math.round(amab),
+      'Responsabilidad y ética':Math.round(respo),
+      'Estabilidad emocional':Math.round(estab),
+      'Apertura e iniciativa':Math.round(apert),
+      'Resiliencia comercial':Math.round(resil),
+      'Atención operativa':Math.round(operativa),
+      'Cercanía al centro laboral':Math.round(cercaniaScore),
+      'Ajuste salarial':Math.round(expectativaScore)
+    },
+    subOperativa:{inventario:Math.round(pctInv),vencimientos:Math.round(pctVenc),yape:Math.round(pctYape)},
+    promedio:Math.round(prom),combinado:Math.round(combinado),perfil,perfilColor,fortalezas,riesgos,narrativa,
+    contexto:{distrito,cercaniaScore,sueldoPedido,expectativaScore,expectativaNota,modalidad}
+  };
+}
+
+/* ADMIN */
+function pedirAdmin(){const p=prompt('Ingrese clave de administrador:');if(p===ADMIN_PASSWORD)vAdmin();else if(p!==null)alert('Clave incorrecta.');}
+function vAdmin(){
+  const lista=JSON.parse(localStorage.getItem('postulantes_minimarket')||'[]');
+  render(`
+  <div class="card">
+    <h2>🔐 Panel de administrador — MINI MARKET</h2>
+    <div class="notice info">Aquí ves los test guardados en ESTE dispositivo. Si los postulantes usaron su propio celular, pega abajo el código que te enviaron por WhatsApp.</div>
+    <h3>1) Evaluar por código recibido</h3>
+    <textarea id="inpCode" placeholder="Pega aquí el código del postulante..." style="min-height:80px"></textarea>
+    <br><br>
+    <button class="btn" onclick="evalCode()">Evaluar código</button>
+    <h3 style="margin-top:22px">2) Postulantes guardados en este dispositivo (${lista.length})</h3>
+    ${lista.length===0?'<p style="color:var(--muted);font-size:13px">Aún no hay registros locales.</p>':
+      `<table>
+        <tr><th>Fecha</th><th>Nombre</th><th>Modalidad</th><th>Psico</th><th>Operat.</th><th>Combinado</th><th>Alertas</th><th></th></tr>
+        ${lista.map((r,i)=>`
+          <tr>
+            <td>${new Date(r.fecha).toLocaleDateString()}</td>
+            <td>${esc(r.nombre)}</td>
+            <td>${esc(r.modalidad)}</td>
+            <td><b>${r.psicometrico?.promedio??'-'}</b></td>
+            <td><b>${r.psicometrico?.dimensiones?.['Atención operativa']??'-'}</b></td>
+            <td><b>${r.psicometrico?.combinado??'-'}</b></td>
+            <td>${r.flags.length?`<span class="tag p">${r.flags.length}</span>`:'<span class="tag g">0</span>'}</td>
+            <td><button class="btn-ghost btn" style="padding:5px 10px;font-size:12px" onclick="verDetalle(${i})">Ver</button></td>
+          </tr>`).join('')}
+      </table>`}
+    <h3 style="margin-top:22px">3) Exportar</h3>
+    <button class="btn btn-ghost" onclick="exportCSV()">⬇️ Descargar CSV</button>
+    <button class="btn btn-ghost" onclick="borrarTodo()">🗑️ Borrar registros locales</button>
+    <div id="detalleBox"></div>
+  </div>`);
+}
+function evalCode(){const code=$('inpCode').value.trim();const r=decodeRes(code);if(!r){alert('Código inválido.');return;}$('detalleBox').innerHTML=renderDetalle(r);$('detalleBox').scrollIntoView({behavior:'smooth'});}
+function verDetalle(i){const lista=JSON.parse(localStorage.getItem('postulantes_minimarket')||'[]');$('detalleBox').innerHTML=renderDetalle(lista[i]);$('detalleBox').scrollIntoView({behavior:'smooth'});}
+
+function renderDetalle(r){
+  const pct=Math.round(100*r.puntajes.personalidad/r.puntajes.maxPersonalidad);
+  const pctCom=r.puntajes.maxComunicacion?Math.round(100*r.puntajes.comunicacion/r.puntajes.maxComunicacion):0;
+  const pctInv=r.puntajes.maxInventario?Math.round(100*r.puntajes.inventario/r.puntajes.maxInventario):0;
+  const pctVenc=r.puntajes.maxVencimientos?Math.round(100*r.puntajes.vencimientos/r.puntajes.maxVencimientos):0;
+  const pctYape=r.puntajes.maxYape?Math.round(100*r.puntajes.yape/r.puntajes.maxYape):0;
+  const pctM=Math.round(100*r.puntajes.memoria/r.puntajes.maxMemoria);
+  const pctC=Math.round(100*r.puntajes.calculo/r.puntajes.maxCalculo);
+  const pers=PREGUNTAS_PERSONALIDAD.map(q=>{const a=r.respuestas.personalidad[q.id];return `<div class="qa"><div class="q">${esc(q.texto)}</div><div class="a">→ ${a?esc(a.txt)+' ('+a.p+' pts)':'Sin respuesta'}</div></div>`;}).join('');
+  const com=PREGUNTAS_COMUNICACION.map(q=>{const a=r.respuestas.comunicacion?.[q.id];return `<div class="qa"><div class="q">${esc(q.texto)}</div><div class="a">→ ${a?esc(a.txt)+' ('+a.p+' pts)':'Sin respuesta'}</div></div>`;}).join('');
+  const inv=PREGUNTAS_INVENTARIO.map(q=>{const a=r.respuestas.inventario?.[q.id];return `<div class="qa"><div class="q">${esc(q.texto)}</div><div class="a">→ ${a?esc(a.txt)+' ('+a.p+' pts)':'Sin respuesta'}</div></div>`;}).join('');
+  const venc=PREGUNTAS_VENCIMIENTOS.map(q=>{const a=r.respuestas.vencimientos?.[q.id];return `<div class="qa"><div class="q">${esc(q.texto)}</div><div class="a">→ ${a?esc(a.txt)+' ('+a.p+' pts)':'Sin respuesta'}</div></div>`;}).join('');
+  const yape=PREGUNTAS_YAPE.map(q=>{const a=r.respuestas.yape?.[q.id];return `<div class="qa"><div class="q">${esc(q.texto)}</div><div class="a">→ ${a?esc(a.txt)+' ('+a.p+' pts)':'Sin respuesta'}</div></div>`;}).join('');
+  const mem=PREGUNTAS_MEMORIA.map(q=>{const a=r.respuestas.memoria[q.id];return `<div class="qa"><div class="q">${esc(q.t)}</div><div class="a">→ ${a?esc(a.txt)+(a.correcta?' ✅':' ❌'):'Sin respuesta'}</div></div>`;}).join('');
+  const cal=PREGUNTAS_CALCULO.map((q,i)=>{const a=r.respuestas.calculo[q.id],t=r.tiemposCalculo?.[i];return `<div class="qa"><div class="q">${esc(q.t)}</div><div class="a">→ ${a?esc(a.txt)+(a.correcta?' ✅':' ❌'):'Sin respuesta'}${t?` (${t}s)`:''}</div></div>`;}).join('');
+  const ab=PREGUNTAS_ABIERTAS.map(q=>`<div class="qa"><div class="q">${esc(q.t)}</div><div class="a">"${esc(r.respuestas.abiertas[q.id]||'')}"</div></div>`).join('');
+  let psicoHTML='';
+  if(r.psicometrico){
+    const p=r.psicometrico;
+    const dims=Object.entries(p.dimensiones).map(([k,v])=>{
+      const color=v>=75?'linear-gradient(90deg,#10b981,#059669)':v>=55?'linear-gradient(90deg,#f59e0b,#d97706)':'linear-gradient(90deg,#ef4444,#b91c1c)';
+      return `<div class="psy-dim"><label><span>${k}</span><b>${v}/100</b></label><div class="psy-bar"><div style="width:${v}%;background:${color}"></div></div></div>`;
+    }).join('');
+    const ctx=p.contexto;
+    const ctxHTML=`<div class="ctx-grid"><div class="ctx-card"><div class="lbl">📍 Distrito</div><div class="val">${esc(ctx.distrito)}</div><div class="det">Cercanía: <b>${ctx.cercaniaScore}/100</b></div></div><div class="ctx-card"><div class="lbl">💰 Expectativa (${esc(ctx.modalidad)})</div><div class="val">S/ ${ctx.sueldoPedido}</div><div class="det">Ajuste: <b>${ctx.expectativaScore}/100</b> · ${esc(ctx.expectativaNota)}</div></div></div>`;
+    const sub=p.subOperativa?`
+      <div style="margin-top:10px;background:#fff;border-radius:10px;padding:12px;font-size:12px">
+        <b style="color:var(--primary-dark)">📦 Detalle operativo:</b>
+        <span style="margin-left:8px">Inventario <b>${p.subOperativa.inventario}%</b> · Vencimientos <b>${p.subOperativa.vencimientos}%</b> · Yape/Plin <b>${p.subOperativa.yape}%</b></span>
+      </div>`:'';
+    psicoHTML=`
+      <div class="psy-box">
+        <h4>🤖 AUDITORÍA PSICOMÉTRICA (IA)</h4>
+        <p style="font-size:14px;margin-bottom:12px"><span class="chip ${p.perfilColor}">${esc(p.perfil)}</span> &nbsp;·&nbsp; Perfil: <b>${p.promedio}/100</b> &nbsp;·&nbsp; Combinado: <b>${p.combinado}/100</b></p>
+        ${ctxHTML}
+        ${sub}
+        <div style="margin-top:12px">${dims}</div>
+        ${p.fortalezas.length?`<div style="margin-top:12px"><b style="color:#065f46;font-size:13px">✅ Fortalezas</b><ul style="margin-left:18px;font-size:13px;line-height:1.7;color:#374151">${p.fortalezas.map(f=>`<li>${esc(f)}</li>`).join('')}</ul></div>`:''}
+        ${p.riesgos.length?`<div style="margin-top:10px"><b style="color:#991b1b;font-size:13px">⚠️ Riesgos</b><ul style="margin-left:18px;font-size:13px;line-height:1.7;color:#374151">${p.riesgos.map(f=>`<li>${esc(f)}</li>`).join('')}</ul></div>`:''}
+        <div class="psy-narrative">${p.narrativa}</div>
+      </div>`;
+  }
+  return `
+  <div class="detail" style="margin-top:20px;border:2px solid var(--primary)">
+    <h4 style="font-size:16px">👤 ${esc(r.nombre)}</h4>
+    <p style="font-size:13px;color:var(--muted)">
+      DNI: ${esc(r.dni)} · Edad: ${esc(r.edad)} · ${esc(r.distrito)} · ${esc(r.grado)}<br>
+      📧 ${esc(r.correo)} · 📱 ${esc(r.telefono)}<br>
+      Modalidad: <b>${esc(r.modalidad)}</b> · Turno: ${esc(r.turno)} · Permanencia: ${esc(r.permanencia)}<br>
+      Disponibilidad: ${esc(r.disponibilidad)} · Aspiración: S/ ${esc(r.sueldo)}<br>
+      Fecha: ${new Date(r.fecha).toLocaleString()}
+    </p>
+    <h4>Puntajes</h4>
+    <p style="font-size:13px">
+      Personalidad: <b>${r.puntajes.personalidad}/${r.puntajes.maxPersonalidad}</b> (${pct}%)<br>
+      Comunicación: <b>${r.puntajes.comunicacion??'-'}/${r.puntajes.maxComunicacion??'-'}</b> (${pctCom}%)<br>
+      Inventario: <b>${r.puntajes.inventario??'-'}/${r.puntajes.maxInventario??'-'}</b> (${pctInv}%)<br>
+      Vencimientos: <b>${r.puntajes.vencimientos??'-'}/${r.puntajes.maxVencimientos??'-'}</b> (${pctVenc}%)<br>
+      Yape/Plin: <b>${r.puntajes.yape??'-'}/${r.puntajes.maxYape??'-'}</b> (${pctYape}%)<br>
+      Memoria visual: <b>${r.puntajes.memoria}/${r.puntajes.maxMemoria}</b> (${pctM}%)<br>
+      Cálculo caja: <b>${r.puntajes.calculo}/${r.puntajes.maxCalculo}</b> (${pctC}%)<br>
+      Tiempo total: <b>${r.flagCount.tiempoTotal} s</b> · Pestañas: <b>${r.flagCount.tab}</b> · Pegados: <b>${r.flagCount.paste}</b>
+    </p>
+    ${psicoHTML}
+    ${r.flags.length?`<h4>⚠️ Alertas de integridad</h4><ul style="margin-left:18px;font-size:13px;color:#991b1b">${r.flags.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>`:''}
+    <h4>Sección 1: Personalidad</h4>${pers}
+    <h4>Sección 2: Comunicación</h4>${com}
+    <h4>Sección 3: Inventario y reposición</h4>${inv}
+    <h4>Sección 4: Detección de vencimientos</h4>${venc}
+    <h4>Sección 5: Yape / Plin y cobros digitales</h4>${yape}
+    <h4>Sección 6: Memoria visual</h4>${mem}
+    <h4>Sección 7: Cálculo</h4>${cal}
+    <h4>Sección 8: Preguntas abiertas</h4>${ab}
+  </div>`;
+}
+function exportCSV(){
+  const lista=JSON.parse(localStorage.getItem('postulantes_minimarket')||'[]');
+  if(!lista.length){alert('Sin registros.');return;}
+  const head=['Fecha','Nombre','DNI','Edad','Correo','Telefono','Grado','Distrito','CercaniaScore','Modalidad','Permanencia','Turno','Disponibilidad','Sueldo','AjusteSalarial','PjePsicometrico','PjeOperativa','ScoreCombinado','Perfil','PjePersonalidad','PjeComunicacion','PjeInventario','PjeVencimientos','PjeYape','PjeMemoria','PjeCalculo','TiempoSeg','CambiosPestana','Pegados','Flags'];
+  const rows=lista.map(r=>[
+    new Date(r.fecha).toLocaleString(),r.nombre,r.dni,r.edad,r.correo,r.telefono,r.grado,r.distrito,
+    r.psicometrico?.contexto?.cercaniaScore,r.modalidad,r.permanencia,r.turno,r.disponibilidad,r.sueldo,
+    r.psicometrico?.contexto?.expectativaScore,r.psicometrico?.promedio,
+    r.psicometrico?.dimensiones?.['Atención operativa'],
+    r.psicometrico?.combinado,r.psicometrico?.perfil,
+    r.puntajes.personalidad,r.puntajes.comunicacion,r.puntajes.inventario,r.puntajes.vencimientos,r.puntajes.yape,
+    r.puntajes.memoria,r.puntajes.calculo,
+    r.flagCount.tiempoTotal,r.flagCount.tab,r.flagCount.paste,r.flags.join(' | ')
+  ]);
+  const csv=[head,...rows].map(r=>r.map(c=>`"${String(c??'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='postulantes_minimarket_'+Date.now()+'.csv';a.click();
+}
+function borrarTodo(){if(confirm('¿Borrar todos los registros locales? Esta acción no se puede deshacer.')){localStorage.removeItem('postulantes_minimarket');vAdmin();}}
+
+vRegistro();
+</script>
+</body>
+</html>
